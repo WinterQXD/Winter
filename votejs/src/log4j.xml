@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+	<!-- 设置通道file和输出方式：org.apache.log4j.RollingFileAppender -->
+	<!-- 滚动日志可以作为调试日志,默认分30份,每份10M -->
+	<appender name="FILE"
+		class="org.apache.log4j.RollingFileAppender">
+		<!-- 设置File参数：日志输出文件名 -->
+		<param name="File"
+			value="D:/tomcat/logs/jsxxsout.log" />
+		<!-- 设置是否在重新启动服务时，在原有日志的基础添加新日志 -->
+		<param name="Append" value="true" />
+		<param name="MaxBackupIndex" value="30" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<!-- 设置输出文件项目和格式 -->
+			<param name="ConversionPattern"
+				value="%d{yyyy-MM-dd HH:mm:ss:SSS} %-4r [%t] %-8p %c %x |%m%n" />
+		</layout>
+		<!--滤镜设置输出的级别-->
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="levelMin" value="DEBUG" />
+			<param name="levelMax" value="FATAL" />
+			<param name="AcceptOnMatch" value="true" />
+		</filter>
+	</appender>
+	<!-- 按天日志可以作为监控日志,按实际日期,每天一个文件 -->
+	<appender name="DailyFILE"
+		class="org.apache.log4j.DailyRollingFileAppender">
+		<!-- 设置File参数：日志输出文件名 -->
+		 <param name="File"
+			value="D:/apache-tomcat-7.0.64/logs/jsxxs.log" />
+		 <!--<param name="File"
+			value="E:/JavaLog/card.log" /> --> 
+		<!-- 设置是否在重新启动服务时，在原有日志的基础添加新日志 -->
+		<param name="Append" value="true" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd'.log'" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<!-- 设置输出文件项目和格式 -->
+			<param name="ConversionPattern"
+				value="%d{yyyy-MM-dd HH:mm:ss:SSS} %-4r [%t] %-8p %c %x |%m%n" />
+		</layout>
+		<!--滤镜设置输出的级别-->
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<!-- 输出监控日志的时候需要配合使用过滤器,这里配置使用info -->
+			<param name="levelMin" value="DEBUG" />
+			<param name="levelMax" value="FATAL" />
+			<param name="AcceptOnMatch" value="true" />
+		</filter>
+	</appender>
+	<!-- 控制台标准输出日志可以作为调试日志-->
+	<appender name="STDOUT" class="org.apache.log4j.ConsoleAppender">
+		<!-- 设置监视器输出方式 -->
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="%d{yyyy-MM-dd HH:mm:ss:SSS} %-4r [%t] %-6p %c %x |%m%n" />
+		</layout>
+		<!--滤镜设置输出的级别-->
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="levelMin" value="DEBUG" />
+			<param name="levelMax" value="FATAL" />
+			<param name="AcceptOnMatch" value="true" />
+		</filter>
+	</appender>
+	<!-- 设置接收所有输出的通道 -->
+	<root>
+		<priority value="INFO" />
+		<!-- 与前面的通道id相对应 -->
+		<!-- 节点ID对应如上，将所有日志输出至一个文件中，该文件每个最大30MB -->
+		<!-- <appender-ref ref="FILE" /> -->
+		<!-- 节点ID对应如上，将所有日志输出至控制台 -->
+		<appender-ref ref="STDOUT" />
+		<!-- 节点ID对应如上，按天输出日志，每天一个文件 -->
+		<appender-ref ref="DailyFILE" /> 
+	</root>
+</log4j:configuration>

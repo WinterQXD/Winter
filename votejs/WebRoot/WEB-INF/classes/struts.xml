@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>	 
+    
+    <constant name="struts.objectFactory" value="org.apache.struts2.spring.StrutsSpringObjectFactory" />
+      <package name="test" extends="struts-default" namespace="">
+      
+           <!-- tologin -->
+        
+			<global-results>
+				<result name="tologin">/login.jsp</result>
+			</global-results>
+          
+          <action name="login"  class="loginAction"  >
+              <result name="loginsuccess">/view/index.jsp</result>
+              <result name="loginerror">/view/login.jsp</result>
+          </action>
+          
+          <action name="wjlist"  class="wjlistAction" >
+              <result name="wjlistsuccess" >/view/wjList.jsp</result>
+          </action>
+          
+          <action name="wjnew" class="wjnewAction" >
+              <result name="wjlistsuccess" >/view/wjList.jsp</result>
+              <result name="wjnewsuccess" >/view/wjNew.jsp</result>
+          </action>
+          
+          <action name="wjupdate" class="wjupdateAction" >
+              <result name="wjlistsuccess" >/view/wjList.jsp</result>
+              <result name="wjupdatesuccess" >/view/wjUpdate.jsp</result>
+          </action>
+          
+          <action name="wjtoupdate" class="wjupdateAction" method="toupdate">
+              <result name="wjupdatesuccess" >/view/wjUpdate.jsp</result>
+          </action>
+         
+          <action name="wjdel" class="wjdelAction" >
+              <result name="wjlistsuccess" >/view/wjList.jsp</result>
+          </action>
+         
+          <action name="wjpublish" class="wjpublishAction" >
+              <result name="wjlistsuccess" >/view/wjList.jsp</result>
+          </action>
+          
+          <action name="upload2" class="upload2Action" >
+              <result name="success" >/view/uploadAction.jsp</result>
+          </action>
+          
+          <action name="VoteAction" class="VoteAction" >
+              <result name="success">/view/voteSuccess.jsp</result>
+              <result name="fail">/view/voteFail.jsp</result>
+          </action>
+          
+          
+          <action name="replayStu" class="replayStuAction" method="selectRep">
+              <result name="success" >/view/replayList.jsp</result>
+          </action>
+          
+          <action name="score" class="scoreAction" >
+              <result name="success" >/view/index2.jsp</result>
+          </action>
+      </package>
+</struts>

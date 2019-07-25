@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	     xmlns:aop="http://www.springframework.org/schema/aop"
+	     xmlns:tx="http://www.springframework.org/schema/tx"
+	     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd">
+	
+	<!-- c3p0 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		
+		
+		<!-- 开发环境-->                   
+		<property name="driverClass" value="com.mysql.jdbc.Driver"/>
+		<property name="jdbcUrl" value="jdbc:mysql://192.168.30.13:3306/vote_real"></property>
+		<property name="user" value="root"></property>
+		<property name="password" value="root"></property>
+		<!-- 真是环境 -->
+		<!-- <property value="jdbc:mysql://localhost:3306/vote" name="jdbcUrl"/>
+		<property value="root" name="user"/>
+		<property value="123456" name="password"/> -->
+		<property name="acquireIncrement" value="5"/>
+		<property name="idleConnectionTestPeriod" value="60"/>
+		<property name="maxPoolSize" value="10"/>
+		<property name="minPoolSize" value="5"/>
+		<property name="maxStatements" value="0"/>
+		<property name="acquireRetryAttempts" value="1"/>
+		<property name="initialPoolSize" value="5"/>
+		<property name="maxIdleTime" value="120"/>
+	</bean>	
+	
+		
+		
+	<!-- Hibernate SessionFactory -->
+	<bean id="sjedu1sessionFactory"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource">
+			<ref local="dataSource" />
+		</property>
+		
+	</bean>	
+	
+	<!-- Transaction manager -->
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory">
+			<ref local="sjedu1sessionFactory" />
+		</property>
+	</bean>
+
+	<!-- Abstract Transaction -->
+	<bean id="abstractTrans" abstract="true"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager">
+			<ref local="transactionManager" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="insert*">
+					PROPAGATION_REQUIRED,-ApplicationException
+				</prop>
+				<prop key="add*">
+					PROPAGATION_REQUIRED,-ApplicationException
+				</prop>
+				<prop key="create*">
+					PROPAGATION_REQUIRED,-ApplicationException
+				</prop>
+				<prop key="update*">
+					PROPAGATION_REQUIRED,-ApplicationException
+				</prop>
+				<prop key="modify*">
+					PROPAGATION_REQUIRED,-ApplicationException
+				</prop>
+				<prop key="remove*">
+					PROPAGATION_REQUIRED,-ApplicationException
+				</prop>
+				<prop key="delete*">
+					PROPAGATION_REQUIRED,-ApplicationException
+				</prop>
+				<prop key="del*">
+					PROPAGATION_REQUIRED,-ApplicationException
+				</prop>
+				<prop key="save*">
+					PROPAGATION_REQUIRED,-ApplicationException
+				</prop>
+				<prop key="import*">
+					PROPAGATION_REQUIRED,-ApplicationException
+				</prop>
+				<prop key="writeLog">
+					PROPAGATION_REQUIRED,-ApplicationException
+				</prop>
+				<prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
+			</props>
+		</property>
+	</bean>		
+	
+	<bean id="objectBeanDao" class="com.vote.dao.ObjectBeanDaoImpl" autowire="byType" scope="prototype">
+	   <property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<bean id="questionDao" class="com.vote.dao.QuestionDaoImpl" autowire="byType" scope="prototype">
+	   <property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<bean id="replayDao" class="com.vote.dao.ReplayDaoImpl" autowire="byType" scope="prototype">
+	   <property name="dataSource" ref="dataSource"></property>
+	</bean>
+	<bean id="replayItemDao" class="com.vote.dao.ReplayItemDaoImpl" autowire="byType" scope="prototype">
+	   <property name="dataSource" ref="dataSource"></property>
+	</bean>
+	<bean id="selecterDao" class="com.vote.dao.SelecterDaoImpl" autowire="byType" scope="prototype">
+	   <property name="dataSource" ref="dataSource"></property>
+	</bean>
+	<bean id="uploadDao" class="com.vote.dao.UploadDaoImpl" autowire="byType" scope="prototype">
+	   <property name="dataSource" ref="dataSource"></property>
+	</bean>
+	<bean id="studentDao" class="com.vote.dao.StudentDaoImpl" autowire="byType" scope="prototype">
+	   <property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	
+	
+	<bean id="loginAction" class="com.vote.action.LoginAction" autowire="byType" scope="prototype"></bean>
+     
+    <bean id="wjlistAction" class="com.vote.action.WjListAction" autowire="byType" scope="prototype">
+        <property name="objectBeanDao" ref="objectBeanDao"></property>
+    </bean>
+    
+    <bean id="wjnewAction" class="com.vote.action.WjNewAction" autowire="byType" scope="prototype">
+       <property name="objectBeanDao" ref="objectBeanDao"></property>
+    </bean>
+    
+    <bean id="wjupdateAction" class="com.vote.action.WjUpdateAction" autowire="byType" scope="prototype">
+       <property name="objectBeanDao" ref="objectBeanDao"></property>
+    </bean>
+    
+    <bean id="wjdelAction" class="com.vote.action.WjDelAction" autowire="byType" scope="prototype">
+       <property name="objectBeanDao" ref="objectBeanDao"></property>
+    </bean>
+ 	
+ 	<bean id="wjpublishAction"  class="com.vote.action.PublishAction" autowire="byType" scope="prototype">
+ 	   <property name="objectBeanDao" ref="objectBeanDao"></property>
+ 	</bean>
+ 	
+ 	<bean id="upload2Action"  class="com.vote.action.Upload2Action" autowire="byType" scope="prototype">
+ 	<property name="updao" ref="uploadDao"></property>
+ 	</bean>
+ 	
+ 	<bean id="VoteAction"  class="com.vote.action.VoteSuccess" autowire="byType" scope="prototype">
+ 	<property name="objd" ref="objectBeanDao"></property>
+ 	<property name="qs" ref="questionDao"></property>
+ 	<property name="rd" ref="replayDao"></property>
+ 	</bean>
+ 	
+ 	
+ 	<bean id="replayStuAction" class="com.vote.action.ReplayStuAction" autowire="byType" scope="prototype">
+ 	  <property name="replayDao" ref="replayDao"></property>
+ 	</bean>
+ 	
+ 	
+ 	<bean id="scoreAction" class="com.vote.action.ScoreAction" autowire="byType" scope="prototype">
+ 	</bean>
+</beans>
